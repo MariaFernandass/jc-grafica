@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <title>Jc Gráfica</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-light bg-success shadow mb-5">
+            <h2 class="text-light p-2">JC Gráfica</h2>
+        </nav>
+        <div class="container">
+            <form action="" method="POST">
+            <div class="row">
+            {% csrf_token %}
+            <div class="col-10">
+                <select class="form-select" aria-label="produto" name="produto" value="{{c.produto}}">
+                    <option selected>{{c.produto}}</option>
+                    <option value="Impressão preto e branco">Impressão preto e branco</option>
+                    <option value="Impressão colorida">Impressão colorida</option>
+                    <option value="Impressão colorida">Impressão em papel fotografico</option>
+                    <option value="Impressão em papel adesivo">Impressão em papel adesivo</option>
+                  </select>
+            </div>
+                <div class="col-2">
+                    <input type="number" class="form-control" placeholder="Quantidade" name="quantidade" aria-label="quantidade" value="{{c.quantidade}}">
+                </div>
+            </div>
+                <div class="pt-2">
+                    <input type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" value="Salvar"/>
+                    <a href="/contatos/"><input class="d-none d-sm-inline-block btn text-primary" value="Voltar"/></a>
+                </div>
+        </form>
+    </body>
+</html>
