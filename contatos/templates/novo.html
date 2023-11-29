@@ -9,10 +9,18 @@
         <title>Jc Gráfica</title>
     </head>
     <body>
-        <nav class="navbar navbar-light bg-success shadow mb-5">
-            <h2 class="text-light p-2">JC Gráfica</h2>
+        <nav class="navbar navbar-expand-lg bg-success">
+            <div class="container">
+                <a class="navbar-brand text-white" href="{% url 'login' %}">JC gráfica</a>
+                <a class="navbar-brand text-white" href="{% url 'dashboard' %}">Voltar</a></div>
+            </div>
         </nav>
-        <div class="container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+        <div class="container mt-5">
             <form action="" method="POST">
             <div class="row">
                     {% csrf_token %}
@@ -31,7 +39,7 @@
                     </div>
                         <div class="pt-2">
                             <input type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" value="Salvar"/>
-                            <a href="/contatos/"><input class="d-none d-sm-inline-block btn text-primary" value="Voltar"/></a>
+                            <a href="{% url 'dashboard' %}"><input class="d-none d-sm-inline-block btn text-primary" value="Voltar"/></a>
                         </div>
                     </div>
                 </div>

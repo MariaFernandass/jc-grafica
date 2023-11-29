@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <title>Jc Gráfica</title>
@@ -12,7 +11,7 @@
         <nav class="navbar navbar-expand-lg bg-success">
             <div class="container">
                 <a class="navbar-brand text-white" href="{% url 'login' %}">JC gráfica</a>
-                <a class="navbar-brand text-white" href="{% url 'cadastro' %}">Cadastro</a></div>
+                <a class="navbar-brand text-white" href="{% url 'logout' %}">Sair</a></div>
             </div>
         </nav>
         {% for message in messages %}
@@ -20,29 +19,16 @@
             {{ message }}
         </div>
     {% endfor %}
-<div class="row container p-5">
-<div class="col-md-6"
-        <div class="container mt-5">
-            <h2>Login</h2>
-            <h6>Realize seus pedidos</h6>
-            <form method="post" action="{% url 'login' %}" class="mt-3">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="senha">Senha:</label>
-                    <input type="password" name="senha" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">Entrar</button>
-                <a class="nav-link active" href="{% url 'cadastro' %}">Não tem cadastro? <b>Clique aqui</b></a>
-            </form>
-        </div>
-        <div class="col-md-6"> 
+        <div class="container-fluid">
+            <!-- Botão de adicionar pedido -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800 pt-5">Produtos</h1>
+                <a href="novo" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
+                        class="fas fa-download fa-sm text-white-50"></i> Adicionar Pedido</a>
+            </div>
             <div class="row">
                 <!-- Card 1-->
-                <div class="col-md-6 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-primary shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -58,9 +44,9 @@
                         </div>
                     </div>
                 </div>
-        
+
                 <!-- Card 2 -->
-                <div class="col-md-6 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-success shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -76,9 +62,9 @@
                         </div>
                     </div>
                 </div>
-        
+
                 <!-- Card 3 -->
-                <div class="col-md-6 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-info shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -98,9 +84,9 @@
                         </div>
                     </div>
                 </div>
-        
+
                 <!-- Card 4 -->
-                <div class="col-md-6 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-warning shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -117,7 +103,44 @@
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="container-fluid">          
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        {{lista|length}} Pedidos
+                    </div>
+                        <table id="datatablesSimple" class="p-4">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+        {% if lista|length > 0 %}
+            <ul>
+            {% for i in lista %}
+                <div class="container text-center">
+                    <tr>
+                      <td>
+                        {{i.produto}} 
+                      </td>
+                      <td>
+                        {{i.quantidade}}
+                      </td>
+                      <td>
+                        <a class="p-3" href="editar/{{i.id}}"><i class="bi bi-pencil-square text-primary"></i></a>
+                        <a class="text-danger" href="remover/{{i.id}}"><i class="bi bi-trash-fill"></i></a>
+                      </td>
+                    </tr>
+                  </div>
+            {% endfor%}
+            </ul>
+        {% else %}
+        <div class="container text-center">
+            Sem pedidos
+          </div>
+        {% endif %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
