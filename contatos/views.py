@@ -1,9 +1,11 @@
-from django.contrib.auth.models import User
-from django.contrib import auth
 from django.shortcuts import render, redirect
 from .models import Pedido
-from django.contrib import messages
-# Create your views here.
+from django.contrib.auth.models import User
+from django.contrib import auth, messages
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
 def index(request):
     return render(request, 'index.html')
 
@@ -39,17 +41,31 @@ def logout(request):
     auth.logout(request)
     return redirect('login')
 
+@login_required
 def novo(request):
-    if request.POST:
-        p = request.POST.get('produto')
-        q = request.POST.get('quantidade')
-        novo = Pedido(produto = p, quantidade = q)
-        novo.save()
+    if request.method == "POST":
+        nome = request.POST.get('nome')
+        email = request.POST.get('email')
+        produto = request.POST.get('produto')
+        tamanho = request.POST.get('tamanho')
+        entrega = request.POST.get('entrega')
+        foto = request.FILES['foto']
+
+        fs = FileSystemStorage()
+        filename = fs.save(foto.name, foto)
+
+        # Obtenha o caminho da imagem
+        foto_path = fs.url(filename)
+        quantidade = int(request.POST.get('quantidade', 0))
+        precos = {'Impressão preto e branco': 1, 'Impressão colorida': 2, 'Impressão em papel fotográfico': 3, 'Impressão em papel adesivo': 4}
+        preco_unitario = precos.get(produto, 0)
+        novo_pedido = Pedido(nome=nome, email=email, produto=produto, tamanho=tamanho, entrega=entrega, quantidade=quantidade, foto=foto_path, preco_unitario=preco_unitario)
+        novo_pedido.save()
+        messages.success(request, 'Pedido criado com sucesso!')
         return redirect('dashboard')
-    else:
-        return render(request, 'novo.html')
 
-
+    return render(request, 'novo.html')
+@login_required
 def remover(request, id):
     pedido = Pedido.objects.get(pk=id)
     if pedido != None:
@@ -59,21 +75,30 @@ def remover(request, id):
         messages.error(request, "Objeto não encontrado")
     
     return redirect('dashboard')
-
+    
 def editar(request, id):
     pedido = Pedido.objects.get(pk=id)
-    ctx = {
-        'c': pedido
-    }
-    if request.POST:
-        p = request.POST.get("produto")
-        q = request.POST.get("quantidade")
-        pedido.produto = p
-        pedido.quantidade = q
+    ctx = {'c': pedido}
+
+    if request.method == 'POST':
+        produto = request.POST.get('produto')
+        quantidade = int(request.POST.get('quantidade', 0))
+        tamanho = request.POST.get('tamanho')
+        entrega = request.POST.get('entrega')
+        precos = {'Impressão preto e branco': 1, 'Impressão colorida': 2, 'Impressão em papel fotográfico': 3, 'Impressão em papel adesivo': 4}
+
+        pedido.produto = produto
+        pedido.quantidade = quantidade
+        pedido.tamanho = tamanho
+        pedido.entrega = entrega
+        pedido.preco_unitario = precos.get(produto, 0)
+        
         pedido.save()
+
+        messages.success(request, 'Pedido atualizado com sucesso!')
         return redirect('dashboard')
     else:
-        return render(request, "editar.html", ctx)
+        return render(request, 'editar.html', ctx)
 
 def cadastro(request):
     if request.method == 'POST':
@@ -107,11 +132,37 @@ def cadastro(request):
     else:
         return render(request, 'cadastro.html')
 
+@login_required
 def dashboard(request):
-    if request.user.is_authenticated:
-        ctx = {
-        'lista' : Pedido.objects.all()
-        }
-        return render(request, 'dashboard.html', ctx)
+    lista = Pedido.objects.filter(email=request.user.email)
+    soma_total = sum(pedido.calcular_preco_total() for pedido in lista)
+    return render(request, 'dashboard.html', {'lista': lista, 'soma_total': soma_total})
+    
+#administrador
+def administrador(request):
+    if request.user.is_staff:
+        lista = Pedido.objects.all()
+        return render(request, 'administrador.html', {'lista': lista},);
+    elif request.user.is_authenticated:
+        messages.error(request,"Acesso negado, você não tem permissão de administrador")
+        return redirect('dashboard')
     else:
-        return render('index')
+        messages.error(request,"Permissão negada")
+        return redirect('index') 
+    
+def statuspedido(request, id):
+    if request.user.is_staff:
+        pedido = Pedido.objects.get(pk=id)
+        ctx = {'c': pedido}
+
+        if request.method == 'POST':
+            status = request.POST.get('status')
+            pedido.status = status
+            pedido.save()
+            messages.success(request, 'Pedido atualizado com sucesso!')
+            return redirect('administrador')
+        else:
+            return render(request, 'statuspedido.html', ctx)
+    else:
+        messages.error(request,"Permissão negada")
+        return redirect('index') 

@@ -3,8 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-        <!-- Bootstrap CSS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <title>Jc Gráfica</title>
     </head>
@@ -24,7 +23,7 @@
             <form action="" method="POST">
             <div class="row">
             {% csrf_token %}
-            <div class="col-10">
+            <div class="col-5">
                 <select class="form-select" aria-label="produto" name="produto" value="{{c.produto}}">
                     <option selected>{{c.produto}}</option>
                     <option value="Impressão preto e branco">Impressão preto e branco</option>
@@ -33,14 +32,39 @@
                     <option value="Impressão em papel adesivo">Impressão em papel adesivo</option>
                   </select>
             </div>
-                <div class="col-2">
+            <div class="col-3">
+                <select class="form-select" aria-label="tamanho" name="tamanho" value="{{c.tamanho}}">
+                    <option selected>{{c.tamanho}}</option>
+                    <option value="Folha A4 completa">Folha A4 completa</option>
+                    <option value="15x21 cm">15 x 21 cm</option>
+                    <option value="10x15 cm">10 x 15 cm</option>
+                    <option value="10x15 cm">10 x 10 cm</option>
+                    <option value="10x15 cm">8 x 8 cm</option>
+                    <option value="10x15 cm">6,5 x 6,5 cm</option>
+                    <option value="10x15 cm">5 x 5 cm</option>
+                    <option value="10x15 cm">4 x 4 cm</option>
+                    <option value="10x15 cm">3 x 4 cm</option>
+                </select>
+            </div>
+            <div class="col-2">
                     <input type="number" class="form-control" placeholder="Quantidade" name="quantidade" aria-label="quantidade" value="{{c.quantidade}}">
-                </div>
+            </div>
+            <div class="col-2">
+                <input type="date" class="form-control" id="entrega" name="entrega" value="{{c.entrega}}" placeholder="informe o prazo da impressão" />
+            </div>
             </div>
                 <div class="pt-2">
                     <input type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-white" value="Salvar"/>
-                    <a href="dashboard"><input class="d-none d-sm-inline-block btn text-primary" value="Voltar"/></a>
+                    <a href="{% url 'dashboard' %}"><input class="d-none d-sm-inline-block btn text-primary" value="Voltar"/></a>
                 </div>
         </form>
     </body>
+    <script>
+        $(document).ready(function(){
+        $(".hide").hide();
+        });
+        </script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </html>
