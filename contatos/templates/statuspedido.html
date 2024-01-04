@@ -22,16 +22,16 @@
         <div class="container mt-5">
             <form action="" method="POST">
             {% csrf_token %}
-                <select class="form-select" aria-label="produto" name="produto" value="{{c.status}}">
+                <select class="form-select" aria-label="status" name="status" value="{{c.status}}">
                     <option selected>{{c.status}}</option>
                     <option value="Em produção">Pedido em produção</option>
                     <option value="Pronto">Pedido pronto</option>
                     <option value="Não podemos entregar no prazo">Tempo insuficiente para entrega</option>
                     <option value="Pedido não aceito">Não aceitar pedido</option>
                   </select>
-                    <button class="btn btn-primary btn-xl text-uppercase mt-4" type="submit">Confirmar</button>                                
+                    <button class="btn btn-primary btn-xl text-uppercase mt-4" type="submit">Confirmar</button>
                 </div>
-          </div>  
+          </div>
         </form>
     </main>
   </body>
