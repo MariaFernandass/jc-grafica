@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <title>Jc Gráfica</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-success">
+            <div class="container">
+                <a class="navbar-brand text-white" href="{% url 'login' %}">JC gráfica</a>
+                <a class="navbar-brand text-white" href="{% url 'dashboard' %}">Voltar</a></div>
+            </div>
+        </nav>
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+        <div class="container mt-5">
+            <form action="" method="POST">
+            {% csrf_token %}
+                <select class="form-select" aria-label="produto" name="produto" value="{{c.status}}">
+                    <option selected>{{c.status}}</option>
+                    <option value="Em produção">Pedido em produção</option>
+                    <option value="Pronto">Pedido pronto</option>
+                    <option value="Não podemos entregar no prazo">Tempo insuficiente para entrega</option>
+                    <option value="Pedido não aceito">Não aceitar pedido</option>
+                  </select>
+                    <button class="btn btn-primary btn-xl text-uppercase mt-4" type="submit">Confirmar</button>                                
+                </div>
+          </div>  
+        </form>
+    </main>
+  </body>
+  <script>
+      $(document).ready(function(){
+      $(".hide").hide();
+      });
+      </script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</html>
